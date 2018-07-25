@@ -1,6 +1,8 @@
-# React Native Navigation (V2) by Wix - Getting Started
+# React Native Navigation (V2) by Wix - Getting Started (Part 1)
 
 This repo goes along with the Medium post [React Native Navigation (V2) by Wix - Getting Started](https://medium.com/@dabit3/react-native-navigation-v2-by-wix-getting-started-7d647e944132)
+
+For part 2, click [here](https://github.com/dabit3/react-native-navigation-v2/tree/Part2).
 
 ## Getting started
 
