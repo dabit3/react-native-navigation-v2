@@ -4,16 +4,15 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  Button,
-  AsyncStorage
+  Button
 } from 'react-native'
 
 import { goHome } from './navigation'
-import { USER_KEY } from './config'
+import { Auth } from 'aws-amplify'
 
 export default class SignIn extends React.Component {
   state = {
-    username: '', password: ''
+    username: '', password: '', user: {}, authenticationCode: '', showConfirmationForm: false
   }
   onChangeText = (key, value) => {
     this.setState({ [key]: value })
@@ -21,8 +20,17 @@ export default class SignIn extends React.Component {
   signIn = async () => {
     const { username, password } = this.state
     try {
-       // login with provider
-       const user = await AsyncStorage.setItem(USER_KEY, username)
+       const user = await Auth.signIn(username, password)
+       console.log('user successfully signed in!', user)
+       this.setState({ user, showConfirmationForm: true })
+    } catch (err) {
+      console.log('error:', err)
+    }
+  }
+  confirmSignIn = async () => {
+    const { user, authenticationCode } = this.state
+    try {
+       await Auth.confirmSignIn(user, authenticationCode)
        console.log('user successfully signed in!', user)
        goHome()
     } catch (err) {
@@ -32,26 +40,49 @@ export default class SignIn extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder='Username'
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('username', val)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Password'
-          autoCapitalize="none"
-          secureTextEntry={true}
-          placeholderTextColor='white'
-          onChangeText={val => this.onChangeText('password', val)}
-        />
-        <Button
-          title='Sign In'
-          onPress={this.signIn}
-        />
+        {
+          !this.state.showConfirmationForm && (
+            <Fragment>
+              <TextInput
+                style={styles.input}
+                placeholder='Username'
+                autoCapitalize="none"
+                autoCorrect={false}
+                placeholderTextColor='white'
+                onChangeText={val => this.onChangeText('username', val)}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder='Password'
+                autoCapitalize="none"
+                secureTextEntry={true}
+                placeholderTextColor='white'
+                onChangeText={val => this.onChangeText('password', val)}
+              />
+              <Button
+                title='Sign In'
+                onPress={this.signIn}
+              />
+            </Fragment>
+          )
+        }
+        {
+          this.state.showConfirmationForm && (
+            <Fragment>
+              <TextInput
+                style={styles.input}
+                placeholder='Authentication Code'
+                autoCapitalize="none"
+                placeholderTextColor='white'
+                onChangeText={val => this.onChangeText('authenticationCode', val)}
+              />
+              <Button
+                title='Confirm Sign In'
+                onPress={this.confirmSignIn}
+              />
+            </Fragment>
+          )
+        }        
       </View>
     )
   }

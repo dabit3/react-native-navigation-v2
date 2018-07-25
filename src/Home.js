@@ -3,14 +3,12 @@ import {
   View,
   Text,
   Button,
-  StyleSheet,
-  AsyncStorage
+  StyleSheet
 } from 'react-native'
 import { goToAuth } from './navigation'
 import {Navigation} from 'react-native-navigation';
 
-import { USER_KEY } from './config'
-
+import { Auth } from 'aws-amplify'
 export default class Home extends React.Component {
   static get options() {
     return {
@@ -23,7 +21,7 @@ export default class Home extends React.Component {
   }
   logout = async () => {
     try {
-      await AsyncStorage.removeItem(USER_KEY)
+      await Auth.signOut()
       goToAuth()
     } catch (err) {
       console.log('error signing out...: ', err)

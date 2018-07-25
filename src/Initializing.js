@@ -2,18 +2,17 @@ import React from 'react'
 import {
   View,
   Text,
-  StyleSheet,
-  AsyncStorage
+  StyleSheet
 } from 'react-native'
 
-import { goToAuth, goHome } from './navigation'
+import { Auth } from 'aws-amplify'
 
-import { USER_KEY } from './config'
+import { goToAuth, goHome } from './navigation'
 
 export default class Initialising extends React.Component {
   async componentDidMount() {
     try {
-      const user = await AsyncStorage.getItem(USER_KEY)
+      const user = await Auth.currentAuthenticatedUser()
       console.log('user: ', user)
       if (user) {
         goHome()

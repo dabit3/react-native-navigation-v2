@@ -7,8 +7,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "aws-amplify": "^0.4.8",
-    "aws-amplify-react-native": "^0.2.19",
+    "aws-amplify": "^1.0.2",
+    "aws-amplify-react-native": "^1.0.2",
     "react": "16.4.1",
     "react-native": "0.56.0",
     "react-native-navigation": "^2.0.2425"
